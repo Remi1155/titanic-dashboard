@@ -1,0 +1,142 @@
+/* src/App.css */
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #333;
+}
+
+.chart-container {
+  margin-bottom: 40px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.error {
+    color: #d9534f; /* Rouge pour les erreurs */
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Styles optionnels pour la table dans FareDistributionInfo */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: right;
+}
+
+th {
+    background-color: #f2f2f2;
+     text-align: center;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap; /* Permet aux boutons de passer à la ligne si l'écran est petit */
+  justify-content: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.nav-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 15px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: #e0e0e0;
+}
+
+.nav-button.active {
+  background-color: #8884d8; /* Ou une autre couleur pour indiquer l'état actif */
+  color: white;
+  border-color: #706cc1;
+  font-weight: bold;
+}
+
+/* Zone où le graphique sélectionné est affiché */
+.chart-display-area {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  min-height: 350px; /* Pour éviter les sauts de page lors du changement */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centre le contenu (titre et graphique) */
+}
+
+.chart-display-area h2 {
+    margin-bottom: 20px; /* Espace entre le titre et le graphique */
+}
+
+
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
