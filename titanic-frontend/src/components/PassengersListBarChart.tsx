@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import {
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
-  LineChart,
-  Line,
+  Legend,
 } from "recharts";
 import { Passenger } from "../types/titanic";
 import PassengerDetail from "./PassengerDetail";
@@ -18,7 +19,7 @@ interface PassengersListProps {
   onClose: () => void;
 }
 
-const PassengersListLineChart: React.FC<PassengersListProps> = ({
+const PassengersListBarChart: React.FC<PassengersListProps> = ({
   data,
   visible,
   onClose,
@@ -28,17 +29,17 @@ const PassengersListLineChart: React.FC<PassengersListProps> = ({
   );
   const [isPassengerDetailOpen, setIsPassengerDetailOpen] =
     useState<boolean>(true);
+
   const styles = PassengerListStyle;
 
   if (!visible) return null;
 
   // On ne garde que ceux qui ont un âge défini
   const chartData = data
-    .filter((p) => p.Age !== null && p.Age !== undefined && p.Fare !== null)
+    .filter((p) => p.Age !== null && p.Age !== undefined)
     .map((p) => ({
       name: p.Name.split(" ")[0], // pour éviter que ce soit trop long
       age: p.Age,
-      fare: p.Fare,
       fullData: p,
     }));
 
@@ -54,9 +55,9 @@ const PassengersListLineChart: React.FC<PassengersListProps> = ({
       </button>
       <div style={styles.card}>
         <div style={styles.chartContainer}>
-          <h3>Prix du billet(fare) en fonction de l'age des passagers</h3>
+          <h3>Âge des passagers</h3>
           <ResponsiveContainer width="100%" height={400}>
-            <LineChart
+            <BarChart
               data={chartData}
               margin={{ top: 20, right: 30, left: 0, bottom: 80 }}
               onClick={({ activePayload }) =>
@@ -65,20 +66,25 @@ const PassengersListLineChart: React.FC<PassengersListProps> = ({
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
-                dataKey="fare"
+                dataKey="name"
                 angle={-45}
                 textAnchor="end"
                 interval={0}
                 height={60}
                 tick={false}
-                label={{ value: "Fare" }}
+                label={{
+                  value: "Passagers",
+                  position: "insideBottom",
+                  offset: 30,
+                }}
               />
               <YAxis
                 label={{ value: "Age", angle: -90, position: "insideLeft" }}
               />
               <Tooltip />
-              <Line type="monotone" dataKey="age" stroke="#82ca9d" />
-            </LineChart>
+              <Bar dataKey="age" fill="#8884d8" />
+              <Legend verticalAlign="bottom" height={36} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
@@ -94,4 +100,4 @@ const PassengersListLineChart: React.FC<PassengersListProps> = ({
   );
 };
 
-export default PassengersListLineChart;
+export default PassengersListBarChart;

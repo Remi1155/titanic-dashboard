@@ -10,9 +10,6 @@ import {
 } from "recharts";
 import { EmbarkedCount, Passenger } from "../types/titanic";
 import axios from "axios";
-// import PassengersList from "./PassengersList";
-import PassengersListAreaChart from "./PassengerListListAreaChart";
-import PassengersListScatterChart from "./PassengerListListScatterChart";
 import PassengersListLineChart from "./PassengerListLineChart";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
@@ -148,7 +145,6 @@ const EmbarkedChart: React.FC<Props> = ({ data }) => {
         <PassengersListLineChart
           data={passengersList}
           visible={showList}
-          // getPassengersSpecificity={getPassengersSpecificity}
           onClose={() => setShowList(false)}
         />
       )}

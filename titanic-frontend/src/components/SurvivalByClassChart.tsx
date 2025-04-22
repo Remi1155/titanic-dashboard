@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Passenger, SurvivalRateByClass } from "../types/titanic";
 import axios from "axios";
-import PassengersListChart from "./PassengersListChart";
+import PassengersListAreaChart from "./PassengerListListAreaChart";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
 
@@ -89,7 +89,7 @@ const SurvivalByClassPieChart: React.FC<Props> = ({ data }) => {
         </PieChart>
       </ResponsiveContainer>
       {showList && (
-        <PassengersListChart
+        <PassengersListAreaChart
           data={passengersList}
           visible={showList}
           // getPassengersSpecificity={getPassengersSpecificity}

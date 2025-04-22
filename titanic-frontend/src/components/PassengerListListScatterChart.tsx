@@ -9,6 +9,8 @@ import {
   ScatterChart,
 } from "recharts";
 import { Passenger } from "../types/titanic";
+import PassengerDetail from "./PassengerDetail";
+import PassengerListStyle from "../styles/PassengerList";
 
 interface PassengersListProps {
   data: Passenger[];
@@ -24,6 +26,9 @@ const PassengersListScatterChart: React.FC<PassengersListProps> = ({
   const [selectedPassenger, setSelectedPassenger] = useState<Passenger | null>(
     null
   );
+  const [isPassengerDetailOpen, setIsPassengerDetailOpen] =
+    useState<boolean>(true);
+  const styles = PassengerListStyle;
 
   if (!visible) return null;
 
@@ -33,39 +38,46 @@ const PassengersListScatterChart: React.FC<PassengersListProps> = ({
     .map((p) => ({
       name: p.Name.split(" ")[0], // pour éviter que ce soit trop long
       age: p.Age,
+      fare: p.Fare,
       fullData: p,
     }));
 
   const handleBarClick = (data: any) => {
     setSelectedPassenger(data.fullData);
+    setIsPassengerDetailOpen(true);
   };
 
   return (
     <div style={styles.container}>
       <button onClick={onClose} style={styles.closeBtn}>
-        X
+        <div>&times;</div>
       </button>
       <div style={styles.card}>
         <div style={styles.chartContainer}>
-          <h3>Âge des passagers</h3>
+          <h3>Prix du billet(fare) en fonction de l'age des passagers</h3>
           <ResponsiveContainer width="100%" height={400}>
             <ScatterChart
               margin={{ top: 20, right: 30, left: 0, bottom: 80 }}
               onClick={({ activePayload }) =>
                 activePayload && handleBarClick(activePayload[0].payload)
               }
+              style={{cursor: "pointer"}}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
-                dataKey="name"
+                dataKey="fare"
                 type="category"
                 angle={-45}
                 textAnchor="end"
                 interval={0}
                 height={60}
                 tick={false}
+                label={{ value: "Fare" }}
               />
-              <YAxis dataKey="age" />
+              <YAxis
+                dataKey="age"
+                label={{ value: "Age", angle: -90, position: "insideLeft" }}
+              />
               <Tooltip cursor={{ strokeDasharray: "3 3" }} />
               <Scatter name="Age" data={chartData} fill="#8884d8" />
             </ScatterChart>
@@ -73,86 +85,15 @@ const PassengersListScatterChart: React.FC<PassengersListProps> = ({
         </div>
 
         {selectedPassenger && (
-          <div style={styles.details}>
-            <h3>{selectedPassenger.Name}</h3>
-            <ul style={styles.detailList}>
-              <li>
-                <strong>Survived:</strong>{" "}
-                {selectedPassenger.Survived === 1 ? "Yes" : "No"}
-              </li>
-              <li>
-                <strong>Class:</strong> {selectedPassenger.Pclass}
-              </li>
-              <li>
-                <strong>Sex:</strong> {selectedPassenger.Sex}
-              </li>
-              <li>
-                <strong>Age:</strong> {selectedPassenger.Age ?? "N/A"}
-              </li>
-              <li>
-                <strong>SibSp:</strong> {selectedPassenger.SibSp}
-              </li>
-              <li>
-                <strong>Parch:</strong> {selectedPassenger.Parch}
-              </li>
-              <li>
-                <strong>Ticket:</strong>{" "}
-                {selectedPassenger.Ticket ?? "Manquant"}
-              </li>
-              <li>
-                <strong>Fare:</strong> {selectedPassenger.Fare ?? "N/A"}
-              </li>
-              <li>
-                <strong>Cabin:</strong> {selectedPassenger.Cabin ?? "Manquant"}
-              </li>
-              <li>
-                <strong>Embarked:</strong> {selectedPassenger.Embarked ?? "N/A"}
-              </li>
-            </ul>
-          </div>
+          <PassengerDetail
+            passenger={selectedPassenger}
+            isOpen={isPassengerDetailOpen}
+            onClose={() => setIsPassengerDetailOpen(false)}
+          />
         )}
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    position: "absolute" as const,
-    top: "10%",
-    left: "10%",
-    backgroundColor: "#f5f5f5",
-    border: "1px solid #ccc",
-    padding: "20px",
-    width: "80%",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    zIndex: 1000,
-    borderRadius: "8px",
-  },
-  chartContainer: {
-    width: "70%",
-  },
-  closeBtn: {
-    position: "absolute" as const,
-    top: "8px",
-    right: "10px",
-    background: "transparent",
-    border: "none",
-    fontSize: "30px",
-    cursor: "pointer",
-  },
-  card: {
-    display: "flex",
-    gap: "20px",
-  },
-  details: {
-    width: "30%",
-  },
-  detailList: {
-    listStyle: "none",
-    padding: 0,
-    lineHeight: "1.5",
-  },
 };
 
 export default PassengersListScatterChart;

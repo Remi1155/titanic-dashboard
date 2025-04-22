@@ -12,8 +12,7 @@ import {
 } from "recharts";
 import { AvgAgeByClass, Passenger } from "../types/titanic";
 import axios from "axios";
-import PassengersListChart from "./PassengersListChart";
-import PassengersListAreaChart from "./PassengerListListAreaChart";
+import PassengersListBarChart from "./PassengersListBarChart";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
 
@@ -107,7 +106,7 @@ const AvgAgeByClassChart: React.FC<Props> = ({ data }) => {
       </ResponsiveContainer>
 
       {showList && (
-        <PassengersListAreaChart
+        <PassengersListBarChart
           data={passengersList}
           visible={showList}
           // getPassengersSpecificity={getPassengersSpecificity}

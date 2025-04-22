@@ -7,7 +7,6 @@ import {
   getSurvivalRateBySex,
   getAverageAgeByClass,
   getPassengerCountByEmbarked,
-  getFareDistribution,
 } from "./services/titanicApi";
 import {
   SurvivalCount,
@@ -15,7 +14,6 @@ import {
   SurvivalRateBySex,
   AvgAgeByClass,
   EmbarkedCount,
-  // FareDistributionData,
 } from "./types/titanic";
 
 // Importez les composants de graphique
@@ -24,8 +22,6 @@ import SurvivalByClassChart from "./components/SurvivalByClassChart";
 import SurvivalBySexChart from "./components/SurvivalBySexChart";
 import AvgAgeByClassChart from "./components/AvgAgeByClassChart";
 import EmbarkedChart from "./components/EmbarkedChart";
-// import FareDistributionInfo from "./components/FareDistributionInfo";
-// import PassengerDetail from "./components/PassengerDetail";
 
 // Définir les types possibles pour les graphiques à afficher
 type ChartType =
@@ -38,12 +34,11 @@ type ChartType =
 
 // Options pour la barre de navigation
 const chartOptions: { key: ChartType; label: string }[] = [
-  { key: "survivalByClass", label: "Taux Survie / Classe" },
+  { key: "survivalByClass", label: "Taux Survie par Classe" },
   { key: "survivalCounts", label: "Survivants vs Non-Survivants" },
-  { key: "survivalBySex", label: "Taux Survie / Sexe" },
-  { key: "avgAgeByClass", label: "Âge Moyen / Classe" },
+  { key: "avgAgeByClass", label: "Âge Moyen par Classe" },
+  { key: "survivalBySex", label: "Taux Survie par Sexe" },
   { key: "embarkedCounts", label: "Ports d'Embarquement" },
-  // { key: "fareDistribution", label: "Répartition Tarifs / Classe" },
 ];
 
 function App() {
@@ -55,9 +50,6 @@ function App() {
   const [survivalBySex, setSurvivalBySex] = useState<SurvivalRateBySex[]>([]);
   const [avgAgeByClass, setAvgAgeByClass] = useState<AvgAgeByClass[]>([]);
   const [embarkedCounts, setEmbarkedCounts] = useState<EmbarkedCount[]>([]);
-  // const [fareDistribution, setFareDistribution] = useState<
-  //   FareDistributionData[]
-  // >([]);
 
   // États pour le chargement et les erreurs
   const [loading, setLoading] = useState<boolean>(true);
@@ -87,7 +79,7 @@ function App() {
           getSurvivalRateBySex(),
           getAverageAgeByClass(),
           getPassengerCountByEmbarked(),
-          getFareDistribution(),
+          // getFareDistribution(),
         ]);
         setSurvivalCounts(survivalCountsData);
         setSurvivalByClass(survivalByClassData);
@@ -118,8 +110,6 @@ function App() {
         return <AvgAgeByClassChart data={avgAgeByClass} />;
       case "embarkedCounts":
         return <EmbarkedChart data={embarkedCounts} />;
-      // case "fareDistribution":
-      //   return <FareDistributionInfo data={fareDistribution} />;
       default:
         return <div>Sélectionnez un graphique dans le menu.</div>;
     }

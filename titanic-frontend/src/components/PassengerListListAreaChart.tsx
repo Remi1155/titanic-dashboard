@@ -7,8 +7,11 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart,
+  Legend,
 } from "recharts";
 import { Passenger } from "../types/titanic";
+import PassengerDetail from "./PassengerDetail";
+import PassengerListStyle from "../styles/PassengerList";
 
 interface PassengersListProps {
   data: Passenger[];
@@ -24,6 +27,9 @@ const PassengersListAreaChart: React.FC<PassengersListProps> = ({
   const [selectedPassenger, setSelectedPassenger] = useState<Passenger | null>(
     null
   );
+  const styles = PassengerListStyle;
+  const [isPassengerDetailOpen, setIsPassengerDetailOpen] =
+    useState<boolean>(true);
 
   if (!visible) return null;
 
@@ -33,21 +39,24 @@ const PassengersListAreaChart: React.FC<PassengersListProps> = ({
     .map((p) => ({
       name: p.Name.split(" ")[0], // pour éviter que ce soit trop long
       age: p.Age,
+      sibsp: p.SibSp,
+      parch: p.Parch,
       fullData: p,
     }));
 
   const handleBarClick = (data: any) => {
     setSelectedPassenger(data.fullData);
+    setIsPassengerDetailOpen(true);
   };
 
   return (
     <div style={styles.container}>
       <button onClick={onClose} style={styles.closeBtn}>
-        X
+        <div>&times;</div>
       </button>
       <div style={styles.card}>
         <div style={styles.chartContainer}>
-          <h3>Âge des passagers</h3>
+          <h3>Age, SibSp et Parch des passagers</h3>
           <ResponsiveContainer width="100%" height={400}>
             <AreaChart
               data={chartData}
@@ -61,7 +70,16 @@ const PassengersListAreaChart: React.FC<PassengersListProps> = ({
                   <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
                   <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
                 </linearGradient>
+                <linearGradient id="colorSibSp" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorParch" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ffc658" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#ffc658" stopOpacity={0} />
+                </linearGradient>
               </defs>
+
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="name"
@@ -70,101 +88,80 @@ const PassengersListAreaChart: React.FC<PassengersListProps> = ({
                 interval={0}
                 height={60}
                 tick={false}
+                label={{
+                  value: "Passagers",
+                  position: "insideBottom",
+                  offset: 30,
+                }}
               />
-              <YAxis />
+              {/* <YAxis/> */}
+              <YAxis
+                yAxisId="left"
+                label={{ value: "Âge", angle: -90, position: "insideLeft" }}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                label={{
+                  value: "SibSp / Parch",
+                  angle: 90,
+                  position: "insideRight",
+                }}
+              />
               <Tooltip />
               <Area
+                yAxisId="left"
                 type="monotone"
                 dataKey="age"
                 stroke="#8884d8"
                 fillOpacity={1}
                 fill="url(#colorAge)"
               />
+              <Area
+                yAxisId="right"
+                type="monotone"
+                dataKey="sibsp"
+                stroke="#82ca9d"
+                fillOpacity={1}
+                fill="url(#colorSibSp)"
+              />
+              <Area
+                yAxisId="right"
+                type="monotone"
+                dataKey="parch"
+                stroke="#ffc658"
+                fillOpacity={1}
+                fill="url(#colorParch)"
+              />
+              <Legend verticalAlign="bottom" height={36} />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-
-        {selectedPassenger && (
-          <div style={styles.details}>
-            <h3>{selectedPassenger.Name}</h3>
-            <ul style={styles.detailList}>
+          <div>
+            <ul>
               <li>
-                <strong>Survived:</strong>{" "}
-                {selectedPassenger.Survived === 1 ? "Yes" : "No"}
+                <b>age: </b>Age du passager
               </li>
               <li>
-                <strong>Class:</strong> {selectedPassenger.Pclass}
+                <b>sibsp: </b>Nombre des frères et soeurs ou conjoints présent à
+                bord
               </li>
               <li>
-                <strong>Sex:</strong> {selectedPassenger.Sex}
-              </li>
-              <li>
-                <strong>Age:</strong> {selectedPassenger.Age ?? "N/A"}
-              </li>
-              <li>
-                <strong>SibSp:</strong> {selectedPassenger.SibSp}
-              </li>
-              <li>
-                <strong>Parch:</strong> {selectedPassenger.Parch}
-              </li>
-              <li>
-                <strong>Ticket:</strong>{" "}
-                {selectedPassenger.Ticket ?? "Manquant"}
-              </li>
-              <li>
-                <strong>Fare:</strong> {selectedPassenger.Fare ?? "N/A"}
-              </li>
-              <li>
-                <strong>Cabin:</strong> {selectedPassenger.Cabin ?? "Manquant"}
-              </li>
-              <li>
-                <strong>Embarked:</strong> {selectedPassenger.Embarked ?? "N/A"}
+                <b>parch: </b>Nombre des parents ou enfants présent à bord
               </li>
             </ul>
           </div>
+        </div>
+
+        {selectedPassenger && (
+          <PassengerDetail
+            passenger={selectedPassenger}
+            isOpen={isPassengerDetailOpen}
+            onClose={() => setIsPassengerDetailOpen(false)}
+          />
         )}
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    position: "absolute" as const,
-    top: "10%",
-    left: "10%",
-    backgroundColor: "#f5f5f5",
-    border: "1px solid #ccc",
-    padding: "20px",
-    width: "80%",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    zIndex: 1000,
-    borderRadius: "8px",
-  },
-  chartContainer: {
-    width: "70%",
-  },
-  closeBtn: {
-    position: "absolute" as const,
-    top: "8px",
-    right: "10px",
-    background: "transparent",
-    border: "none",
-    fontSize: "30px",
-    cursor: "pointer",
-  },
-  card: {
-    display: "flex",
-    gap: "20px",
-  },
-  details: {
-    width: "30%",
-  },
-  detailList: {
-    listStyle: "none",
-    padding: 0,
-    lineHeight: "1.5",
-  },
 };
 
 export default PassengersListAreaChart;

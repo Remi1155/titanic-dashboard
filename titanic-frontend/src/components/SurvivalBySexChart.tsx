@@ -12,7 +12,6 @@ import {
 } from "recharts";
 import { Passenger, SurvivalRateBySex } from "../types/titanic";
 import axios from "axios";
-import PassengersList from "./PassengersList";
 import PassengersListScatterChart from "./PassengerListListScatterChart";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
