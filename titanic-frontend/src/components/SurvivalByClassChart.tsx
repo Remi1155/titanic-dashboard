@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Passenger, SurvivalRateByClass } from "../types/titanic";
 import axios from "axios";
 import PassengersListAreaChart from "./PassengerListListAreaChart";
+import PassengerListStyle from "../styles/PassengerList";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
 
@@ -34,6 +35,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
 const SurvivalByClassPieChart: React.FC<Props> = ({ data }) => {
   const [showList, setShowList] = useState(false);
   const [passengersList, setPassengersList] = useState<Passenger[]>([]);
+  const styles = PassengerListStyle;
 
   if (!data || data.length === 0) {
     return <div>Loading survival rate by class...</div>;
@@ -63,6 +65,9 @@ const SurvivalByClassPieChart: React.FC<Props> = ({ data }) => {
         <PieChart>
           <Tooltip
             formatter={(value: number) => `${(value * 100).toFixed(1)}%`}
+            contentStyle={styles.tooltip.contentStyle}
+            itemStyle={styles.tooltip.itemStyle}
+            labelStyle={styles.tooltip.itemStyle}
           />
           <Pie
             data={chartData}

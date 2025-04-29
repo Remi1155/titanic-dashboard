@@ -13,6 +13,7 @@ import {
 import { AvgAgeByClass, Passenger } from "../types/titanic";
 import axios from "axios";
 import PassengersListBarChart from "./PassengersListBarChart";
+import PassengerListStyle from "../styles/PassengerList";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
 
@@ -41,6 +42,7 @@ interface Props {
 const AvgAgeByClassChart: React.FC<Props> = ({ data }) => {
   const [showList, setShowList] = useState(false);
   const [passengersList, setPassengersList] = useState<Passenger[]>([]);
+  const styles = PassengerListStyle;
 
   if (!data || data.length === 0) {
     return <div>Loading average age by class...</div>;
@@ -94,7 +96,12 @@ const AvgAgeByClassChart: React.FC<Props> = ({ data }) => {
               dy: 50,
             }}
           />
-          <Tooltip formatter={(value: number) => `${value.toFixed(1)} ans`} />
+          <Tooltip
+            formatter={(value: number) => `${value.toFixed(1)} ans`}
+            contentStyle={styles.tooltip.contentStyle}
+            itemStyle={styles.tooltip.itemStyle}
+            labelStyle={styles.tooltip.labelStyle}
+          />
           <Legend />
           <Bar
             dataKey="Âge Moyen"
@@ -109,7 +116,6 @@ const AvgAgeByClassChart: React.FC<Props> = ({ data }) => {
         <PassengersListBarChart
           data={passengersList}
           visible={showList}
-          // getPassengersSpecificity={getPassengersSpecificity}
           onClose={() => setShowList(false)}
         />
       )}

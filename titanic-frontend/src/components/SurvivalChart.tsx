@@ -12,6 +12,8 @@ import {
 import { Passenger, SurvivalCount } from "../types/titanic";
 import axios from "axios";
 import PassengersList from "./PassengersList";
+import PassengerDetailStyle from "../styles/PassengerDetail";
+import PassengerListStyle from "../styles/PassengerList";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
 
@@ -40,6 +42,7 @@ interface Props {
 const SurvivalChart: React.FC<Props> = ({ data }) => {
   const [showList, setShowList] = useState(false);
   const [passengersList, setPassengersList] = useState<Passenger[]>([]);
+  const styles = PassengerListStyle
 
   if (!data || data.length === 0) {
     return <div>Loading survival data...</div>;
@@ -91,7 +94,11 @@ const SurvivalChart: React.FC<Props> = ({ data }) => {
               dy: 70,
             }}
           />
-          <Tooltip />
+          <Tooltip
+            contentStyle={styles.tooltip.contentStyle}
+            itemStyle={styles.tooltip.itemStyle}
+            labelStyle={styles.tooltip.labelStyle} 
+          />
           <Legend />
           <Bar
             dataKey="count"

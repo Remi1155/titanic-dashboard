@@ -30,7 +30,8 @@ type ChartType =
   | "survivalBySex"
   | "avgAgeByClass"
   | "embarkedCounts"
-  | "fareDistribution"; // Inclure la vue des tarifs
+  | "fareDistribution"
+  | "fieldsMeaning";
 
 // Options pour la barre de navigation
 const chartOptions: { key: ChartType; label: string }[] = [
@@ -39,6 +40,7 @@ const chartOptions: { key: ChartType; label: string }[] = [
   { key: "avgAgeByClass", label: "Âge Moyen par Classe" },
   { key: "survivalBySex", label: "Taux Survie par Sexe" },
   { key: "embarkedCounts", label: "Ports d'Embarquement" },
+  { key: "fieldsMeaning", label: "Concernant les données" },
 ];
 
 function App() {
@@ -110,6 +112,13 @@ function App() {
         return <AvgAgeByClassChart data={avgAgeByClass} />;
       case "embarkedCounts":
         return <EmbarkedChart data={embarkedCounts} />;
+      case "fieldsMeaning":
+        return (
+          <div>
+            <h3>Liste des champs dans les données et ses signification:</h3>
+            <img src="/fields_meaning_titanic.png" />
+          </div>
+        );
       default:
         return <div>Sélectionnez un graphique dans le menu.</div>;
     }
@@ -128,32 +137,31 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <h1>Tableau de Bord - Titanic</h1>
-
-      {/* Barre de Navigation */}
-      <nav className="navbar">
+    <div className="app-container">
+      <div className="sidebar">
+        <h1>Tableau de Bord - Titanic</h1>
         {chartOptions.map((option) => (
           <button
             key={option.key}
+            className={selectedChart === option.key ? "active" : ""}
             onClick={() => setSelectedChart(option.key)}
-            className={`nav-button ${
-              selectedChart === option.key ? "active" : ""
-            }`}
           >
             {option.label}
           </button>
         ))}
-      </nav>
-
-      {/* Zone d'affichage du graphique sélectionné */}
-      <div className="chart-display-area">
-        {/* Affiche un titre dynamique */}
-        <h2>{selectedChartLabel}</h2>
-        {renderSelectedChart()}
+      </div>
+      <div className="chart-area">
+        {loading ? (
+          <p>Chargement...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          renderSelectedChart()
+        )}
       </div>
     </div>
   );
+  
 }
 
 export default App;

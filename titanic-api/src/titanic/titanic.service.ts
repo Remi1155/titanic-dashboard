@@ -143,17 +143,9 @@ export class TitanicService {
     return this.passengersRepository.find({
       select: ['Pclass', 'Fare'],
       where: {
-        Fare: Not(IsNull()), // Exclure les tarifs nuls si nécessaire (optionnel ici)
+        Fare: Not(IsNull()),
       },
     });
-    // Alternative avec QueryBuilder si plus de logique est nécessaire
-    /*
-        return this.passengersRepository
-            .createQueryBuilder('passenger')
-            .select(['passenger.Pclass', 'passenger.Fare'])
-            .where('passenger.Fare IS NOT NULL')
-            .getMany(); // getMany retourne des entités partielles
-        */
   }
 
   // 5. Passagers de meme Survived
@@ -282,10 +274,4 @@ export class TitanicService {
   }
 }
 
-// Ajoutez cette importation si vous utilisez la version commentée de getFareDistributionByClass
 import { IsNull, Not } from 'typeorm';
-
-// import { Injectable } from '@nestjs/common';
-
-// @Injectable()
-// export class TitanicService {}

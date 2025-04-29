@@ -61,7 +61,7 @@ const PassengersListScatterChart: React.FC<PassengersListProps> = ({
               onClick={({ activePayload }) =>
                 activePayload && handleBarClick(activePayload[0].payload)
               }
-              style={{cursor: "pointer"}}
+              style={{ cursor: "pointer" }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
@@ -78,7 +78,12 @@ const PassengersListScatterChart: React.FC<PassengersListProps> = ({
                 dataKey="age"
                 label={{ value: "Age", angle: -90, position: "insideLeft" }}
               />
-              <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+              <Tooltip
+                cursor={{ strokeDasharray: "3 3" }}
+                contentStyle={styles.tooltip.contentStyle}
+                itemStyle={styles.tooltip.itemStyle}
+                labelStyle={styles.tooltip.labelStyle}
+              />
               <Scatter name="Age" data={chartData} fill="#8884d8" />
             </ScatterChart>
           </ResponsiveContainer>

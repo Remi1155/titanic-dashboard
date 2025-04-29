@@ -76,7 +76,11 @@ const PassengersListLineChart: React.FC<PassengersListProps> = ({
               <YAxis
                 label={{ value: "Age", angle: -90, position: "insideLeft" }}
               />
-              <Tooltip />
+              <Tooltip
+                contentStyle={styles.tooltip.contentStyle}
+                itemStyle={styles.tooltip.itemStyle}
+                labelStyle={styles.tooltip.labelStyle}
+              />
               <Line type="monotone" dataKey="age" stroke="#82ca9d" />
             </LineChart>
           </ResponsiveContainer>

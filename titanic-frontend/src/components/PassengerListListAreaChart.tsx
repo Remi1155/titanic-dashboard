@@ -108,7 +108,11 @@ const PassengersListAreaChart: React.FC<PassengersListProps> = ({
                   position: "insideRight",
                 }}
               />
-              <Tooltip />
+              <Tooltip
+                contentStyle={styles.tooltip.contentStyle}
+                itemStyle={styles.tooltip.itemStyle}
+                labelStyle={styles.tooltip.labelStyle}
+              />
               <Area
                 yAxisId="left"
                 type="monotone"
@@ -136,7 +140,7 @@ const PassengersListAreaChart: React.FC<PassengersListProps> = ({
               <Legend verticalAlign="bottom" height={36} />
             </AreaChart>
           </ResponsiveContainer>
-          <div>
+          {/* <div>
             <ul>
               <li>
                 <b>age: </b>Age du passager
@@ -149,7 +153,7 @@ const PassengersListAreaChart: React.FC<PassengersListProps> = ({
                 <b>parch: </b>Nombre des parents ou enfants présent à bord
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
 
         {selectedPassenger && (

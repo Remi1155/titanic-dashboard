@@ -11,6 +11,7 @@ import {
 import { EmbarkedCount, Passenger } from "../types/titanic";
 import axios from "axios";
 import PassengersListLineChart from "./PassengerListLineChart";
+import PassengerListStyle from "../styles/PassengerList";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
 
@@ -55,6 +56,7 @@ const getPortName = (code: string): string => {
 const EmbarkedChart: React.FC<Props> = ({ data }) => {
   const [showList, setShowList] = useState(false);
   const [passengersList, setPassengersList] = useState<Passenger[]>([]);
+  const styles = PassengerListStyle;
 
   if (!data || data.length === 0) {
     return <div>Loading embarked data...</div>;
@@ -137,6 +139,9 @@ const EmbarkedChart: React.FC<Props> = ({ data }) => {
               `${value} passagers`,
               name,
             ]}
+            contentStyle={styles.tooltip.contentStyle}
+            itemStyle={styles.tooltip.itemStyle}
+            labelStyle={styles.tooltip.labelStyle}
           />
           <Legend />
         </PieChart>

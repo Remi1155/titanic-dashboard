@@ -13,6 +13,7 @@ import {
 import { Passenger, SurvivalRateBySex } from "../types/titanic";
 import axios from "axios";
 import PassengersListScatterChart from "./PassengerListListScatterChart";
+import PassengerListStyle from "../styles/PassengerList";
 
 const API_BASE_URL = "http://localhost:3000/titanic";
 
@@ -41,6 +42,7 @@ interface Props {
 const SurvivalBySexChart: React.FC<Props> = ({ data }) => {
   const [showList, setShowList] = useState(false);
   const [passengersList, setPassengersList] = useState<Passenger[]>([]);
+  const styles = PassengerListStyle;
 
   if (!data || data.length === 0) {
     return <div>Loading survival rate by sex...</div>;
@@ -90,6 +92,9 @@ const SurvivalBySexChart: React.FC<Props> = ({ data }) => {
           />
           <Tooltip
             formatter={(value: number) => `${(value * 100).toFixed(1)}%`}
+            contentStyle={styles.tooltip.contentStyle}
+            itemStyle={styles.tooltip.itemStyle}
+            labelStyle={styles.tooltip.labelStyle}
           />
           <Legend />
           <Bar

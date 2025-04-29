@@ -21,7 +21,12 @@ const PassengerDetail: React.FC<PassengerDetailProps> = ({
 
   return (
     <div style={styles.container}>
-      <button onClick={() => onClose()} style={styles.closeBtn}><div>&times;</div></button>
+      <div style={styles.containerCloseBtn}>
+        <button onClick={() => onClose()} style={styles.closeBtn}>
+          <div>&times;</div>
+        </button>
+      </div>
+
       <h2 style={styles.title}>{passenger.Name}</h2>
       <ul style={styles.list}>
         {/* <li><strong>ID:</strong> {passenger.PassengerId}</li> */}

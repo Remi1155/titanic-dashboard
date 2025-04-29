@@ -81,7 +81,12 @@ const PassengersListBarChart: React.FC<PassengersListProps> = ({
               <YAxis
                 label={{ value: "Age", angle: -90, position: "insideLeft" }}
               />
-              <Tooltip />
+              <Tooltip
+                contentStyle={styles.tooltip.contentStyle}
+                itemStyle={styles.tooltip.itemStyle}
+                labelStyle={styles.tooltip.labelStyle}
+              />
+
               <Bar dataKey="age" fill="#8884d8" />
               <Legend verticalAlign="bottom" height={36} />
             </BarChart>
