@@ -5,7 +5,7 @@ const PassengerDetailStyle = {
     border: "1px solid #444",
     borderRadius: "12px",
     padding: "20px",
-    maxWidth: "500px",
+    maxWidth: "50%",
     margin: "20px auto",
     backgroundColor: "#2a2a2a",
     boxShadow: "0 2px 10px rgba(0, 0, 0, 0.6)",

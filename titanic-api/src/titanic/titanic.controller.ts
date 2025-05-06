@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import {
   TitanicService,
@@ -23,6 +24,14 @@ export class TitanicController {
   @Get('passengers') // GET /titanic/passengers
   async findAll(): Promise<Passenger[]> {
     return this.titanicService.findAll();
+  }
+
+  @Get('morceau') // GET /titanic/morceau
+  async getPieceOfData(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ): Promise<{ data: Passenger[]; total: number }> {
+    return this.titanicService.getPieceOfData(+page, +limit);
   }
 
   @Get('passengers/:id') // GET /titanic/passengers/892
@@ -101,8 +110,3 @@ export class TitanicController {
     return this.titanicService.getSurvivedPassengersWithSameClass(pclass);
   }
 }
-
-// import { Controller } from '@nestjs/common';
-
-// @Controller('titanic')
-// export class TitanicController {}

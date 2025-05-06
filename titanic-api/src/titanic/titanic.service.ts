@@ -4,9 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Passenger } from './entities/passenger.entity';
 
-// Optionnel : DTOs pour structurer les réponses (bonne pratique)
 export interface SurvivalCountDto {
-  Survived: number | string; // Peut être string après mapping
+  Survived: number | string;
   count: number;
 }
 
@@ -37,12 +36,12 @@ export class TitanicService {
     private passengersRepository: Repository<Passenger>,
   ) {}
 
-  // Récupérer tous les passagers (potentiellement à paginer)
+  // Récupération tous les passagers (potentiellement à paginer)
   async findAll(): Promise<Passenger[]> {
     return this.passengersRepository.find();
   }
 
-  // Récupérer un passager par ID
+  // Récupération un passager par ID
   async findOne(id: number): Promise<Passenger> {
     const passenger = await this.passengersRepository.findOneBy({
       PassengerId: id,
@@ -62,10 +61,8 @@ export class TitanicService {
       GROUP BY Survived
     `);
 
-    // Conversion du count en nombre (getRawMany peut retourner des strings)
-    // et mapping optionnel des labels 0/1
     return results.map((row) => ({
-      Survived: row.Survived === 1 ? 'Survivants' : 'Non Survivants', // Map 0/1 to labels
+      Survived: row.Survived === 1 ? 'Survivants' : 'Non Survivants',
       count: parseInt(row.count, 10),
     }));
   }
@@ -139,7 +136,6 @@ export class TitanicService {
   async getFareDistributionByClass(): Promise<
     Pick<Passenger, 'Pclass' | 'Fare'>[]
   > {
-    // On retourne juste les colonnes Pclass et Fare pour que le front-end fasse la visualisation (boxplot)
     return this.passengersRepository.find({
       select: ['Pclass', 'Fare'],
       where: {
@@ -271,6 +267,48 @@ export class TitanicService {
       Cabin: row.Cabin,
       Embarked: row.Embarked,
     }));
+  }
+
+  // 9. Morceau de données
+  async getPieceOfData(
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{ data: Passenger[]; total: number }> {
+    const offset = (page - 1) * limit;
+
+    const [data, totalResult] = await Promise.all([
+      this.passengersRepository.query(
+        `
+        SELECT *
+        FROM passengers
+        LIMIT ?
+        OFFSET ?`,
+        [limit, offset],
+      ),
+      this.passengersRepository.query(`
+        SELECT COUNT(*) as count
+        FROM passengers
+      `),
+    ]);
+
+    const total = parseInt(totalResult[0].count, 10);
+
+    const passengers: Passenger[] = data.map((row) => ({
+      PassengerId: row.PassengerId,
+      Survived: row.Survived,
+      Pclass: row.Pclass,
+      Name: row.Name,
+      Sex: row.Sex,
+      Age: row.Age,
+      SibSp: row.SibSp,
+      Parch: row.Parch,
+      Ticket: row.Ticket,
+      Fare: row.Fare,
+      Cabin: row.Cabin,
+      Embarked: row.Embarked,
+    }));
+
+    return { data: passengers, total };
   }
 }
 

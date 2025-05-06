@@ -7,6 +7,7 @@ import {
   EmbarkedCount,
   FareDistributionData,
   SurvivalRateBySex,
+  Passenger,
 } from "../types/titanic"; // Ajustez le chemin si nécessaire
 
 // Définissez l'URL de base de votre API NestJS
@@ -15,6 +16,16 @@ const API_BASE_URL = "http://localhost:3000/titanic"; // Changez si votre backen
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
 });
+
+export const getAllPassengers = async (): Promise<Passenger[]> => {
+  try {
+    const response = await apiClient.get("/passengers");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all passengers:", error);
+    throw error;
+  }
+};
 
 export const getSurvivalCounts = async (): Promise<SurvivalCount[]> => {
   try {
@@ -38,9 +49,7 @@ export const getSurvivalRateByClass = async (): Promise<
   }
 };
 
-export const getSurvivalRateBySex = async (): Promise<
-  SurvivalRateBySex[]
-> => {
+export const getSurvivalRateBySex = async (): Promise<SurvivalRateBySex[]> => {
   try {
     const response = await apiClient.get("/stats/survival-rate/by-sex");
     return response.data;
@@ -85,4 +94,31 @@ export const getFareDistribution = async (): Promise<
   }
 };
 
-// Ajoutez d'autres fonctions pour les autres endpoints si nécessaire (findAll, findOne)
+export const getPieceOfData = async (
+  page: number,
+  limit: number
+): Promise<{ data: Passenger[]; total: number }> => {
+  try {
+    const response = await apiClient.get("/morceau", {
+      params: { page, limit }, // ✅ paramètres pour la pagination
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching piece of data:", error);
+    throw error;
+  }
+};
+
+
+// export const getPieceOfData = async (): Promise<{
+//   data: Passenger[];
+//   total: number;
+// }> => {
+//   try {
+//     const response = await apiClient.get("/morceau");
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching piece of data:", error);
+//     throw error;
+//   }
+// };

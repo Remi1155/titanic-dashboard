@@ -7,6 +7,7 @@ import {
   getSurvivalRateBySex,
   getAverageAgeByClass,
   getPassengerCountByEmbarked,
+  // getPieceOfData,
 } from "./services/titanicApi";
 import {
   SurvivalCount,
@@ -14,6 +15,7 @@ import {
   SurvivalRateBySex,
   AvgAgeByClass,
   EmbarkedCount,
+  // Passenger,
 } from "./types/titanic";
 
 // Importez les composants de graphique
@@ -22,6 +24,8 @@ import SurvivalByClassChart from "./components/SurvivalByClassChart";
 import SurvivalBySexChart from "./components/SurvivalBySexChart";
 import AvgAgeByClassChart from "./components/AvgAgeByClassChart";
 import EmbarkedChart from "./components/EmbarkedChart";
+import PieceOfData from "./components/PieceOfData";
+import FieldsMeaning from "./components/FieldsMeaning";
 
 // Définir les types possibles pour les graphiques à afficher
 type ChartType =
@@ -31,20 +35,21 @@ type ChartType =
   | "avgAgeByClass"
   | "embarkedCounts"
   | "fareDistribution"
-  | "fieldsMeaning";
+  | "fieldsMeaning"
+  | "morceau";
 
 // Options pour la barre de navigation
 const chartOptions: { key: ChartType; label: string }[] = [
+  { key: "fieldsMeaning", label: "Concernant les données" },
+  { key: "morceau", label: "Morceau des données" },
   { key: "survivalByClass", label: "Taux Survie par Classe" },
   { key: "survivalCounts", label: "Survivants vs Non-Survivants" },
   { key: "avgAgeByClass", label: "Âge Moyen par Classe" },
   { key: "survivalBySex", label: "Taux Survie par Sexe" },
   { key: "embarkedCounts", label: "Ports d'Embarquement" },
-  { key: "fieldsMeaning", label: "Concernant les données" },
 ];
 
 function App() {
-  // États pour les données de chaque graphique
   const [survivalCounts, setSurvivalCounts] = useState<SurvivalCount[]>([]);
   const [survivalByClass, setSurvivalByClass] = useState<SurvivalRateByClass[]>(
     []
@@ -53,14 +58,12 @@ function App() {
   const [avgAgeByClass, setAvgAgeByClass] = useState<AvgAgeByClass[]>([]);
   const [embarkedCounts, setEmbarkedCounts] = useState<EmbarkedCount[]>([]);
 
-  // États pour le chargement et les erreurs
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // État pour le graphique sélectionné
   const [selectedChart, setSelectedChart] = useState<ChartType>(
     chartOptions[0].key
-  ); // Afficher le premier par défaut
+  );
 
   // Récupération des données (inchangée)
   useEffect(() => {
@@ -112,21 +115,18 @@ function App() {
         return <AvgAgeByClassChart data={avgAgeByClass} />;
       case "embarkedCounts":
         return <EmbarkedChart data={embarkedCounts} />;
+      case "morceau":
+        return <PieceOfData />;
       case "fieldsMeaning":
-        return (
-          <div>
-            <h3>Liste des champs dans les données et ses signification:</h3>
-            <img src="/fields_meaning_titanic.png" />
-          </div>
-        );
+        return <FieldsMeaning />;
       default:
         return <div>Sélectionnez un graphique dans le menu.</div>;
     }
   };
 
   // Trouver le label du graphique sélectionné pour le titre
-  const selectedChartLabel =
-    chartOptions.find((opt) => opt.key === selectedChart)?.label || "Graphique";
+  // const selectedChartLabel =
+  //   chartOptions.find((opt) => opt.key === selectedChart)?.label || "Graphique";
 
   if (loading) {
     return <div className="container">Chargement des données...</div>;
@@ -139,7 +139,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="sidebar">
-        <h1>Tableau de Bord - Titanic</h1>
+        <h1>Tableau de Bord Titanic</h1>
         {chartOptions.map((option) => (
           <button
             key={option.key}
@@ -161,7 +161,6 @@ function App() {
       </div>
     </div>
   );
-  
 }
 
 export default App;
