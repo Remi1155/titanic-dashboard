@@ -269,7 +269,7 @@ export class TitanicService {
     }));
   }
 
-  // 9. Morceau de données
+  // 10. Morceau de données
   async getPieceOfData(
     page: number = 1,
     limit: number = 10,

@@ -5,7 +5,7 @@ import "../styles/PieceOfData.css";
 
 const PieceOfData = () => {
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [passengers, setPassengers] = useState<Passenger[]>([]);
   const [total, setTotal] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,10 +46,14 @@ const PieceOfData = () => {
 
   const uniqueValues = useMemo(() => {
     const getUnique = (key: keyof Passenger) =>
-      Array.from(new Set(
-        allPassengers.map((p) => p[key]).filter((v) => v !== null && v !== undefined)
-      )).map(String); // tout convertir en string
-  
+      Array.from(
+        new Set(
+          allPassengers
+            .map((p) => p[key])
+            .filter((v) => v !== null && v !== undefined)
+        )
+      ).map(String); // tout convertir en string
+
     return {
       Survived: getUnique("Survived"),
       Pclass: getUnique("Pclass"),
@@ -57,7 +61,6 @@ const PieceOfData = () => {
       Embarked: getUnique("Embarked"),
     };
   }, [allPassengers]);
-  
 
   useEffect(() => {
     let data = searchTerm.trim()
@@ -66,11 +69,12 @@ const PieceOfData = () => {
         )
       : passengers;
 
-    data = data.filter((p) =>
-      (!filters.Survived || String(p.Survived) === filters.Survived) &&
-      (!filters.Pclass || String(p.Pclass) === filters.Pclass) &&
-      (!filters.Sex || p.Sex === filters.Sex) &&
-      (!filters.Embarked || p.Embarked === filters.Embarked)
+    data = data.filter(
+      (p) =>
+        (!filters.Survived || String(p.Survived) === filters.Survived) &&
+        (!filters.Pclass || String(p.Pclass) === filters.Pclass) &&
+        (!filters.Sex || p.Sex === filters.Sex) &&
+        (!filters.Embarked || p.Embarked === filters.Embarked)
     );
 
     setPassengersToShow(data);
@@ -87,6 +91,18 @@ const PieceOfData = () => {
       <div className="header">
         <h2 className="titre">Liste des passagers</h2>
         <div className="search-bar">
+          <label htmlFor="limit">Afficher par: </label>
+          <input
+            type="number"
+            placeholder="Nombre de passagers a afficher"
+            value={limit}
+            max={30}
+            min={1}
+            name="limit"
+            onChange={(e) => setLimit(Number(e.target.value))}
+            className="search-input"
+            style={{marginRight: "50px"}}
+          />
           <input
             type="text"
             placeholder="Rechercher par nom..."
@@ -106,11 +122,15 @@ const PieceOfData = () => {
                 <select
                   className="filter-select"
                   value={filters.Survived}
-                  onChange={(e) => handleFilterChange("Survived", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("Survived", e.target.value)
+                  }
                 >
                   <option value="">Tous</option>
                   {uniqueValues.Survived.map((v) => (
-                    <option key={v} value={v}>{v}</option>
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
                   ))}
                 </select>
               </th>
@@ -122,7 +142,9 @@ const PieceOfData = () => {
                 >
                   <option value="">Tous</option>
                   {uniqueValues.Pclass.map((v) => (
-                    <option key={v} value={v}>{v}</option>
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
                   ))}
                 </select>
               </th>
@@ -134,7 +156,9 @@ const PieceOfData = () => {
                 >
                   <option value="">Tous</option>
                   {uniqueValues.Sex.map((v) => (
-                    <option key={v} value={v}>{v}</option>
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
                   ))}
                 </select>
               </th>
@@ -148,11 +172,15 @@ const PieceOfData = () => {
                 <select
                   className="filter-select"
                   value={filters.Embarked}
-                  onChange={(e) => handleFilterChange("Embarked", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("Embarked", e.target.value)
+                  }
                 >
                   <option value="">Tous</option>
                   {uniqueValues.Embarked.map((v) => (
-                    <option key={v} value={v}>{v}</option>
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
                   ))}
                 </select>
               </th>
